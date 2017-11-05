@@ -1,0 +1,10 @@
+Java Wiki
+
+Java is a programming language. It was first developed by James Gosling at Sun Microsystems,
+which is now a part of Oracle Corporation. It was released in 1995 as a part of Sun Microsystems'
+Java platform. The language has developed much of its syntax from C and C++. Java applications are
+usually compiled to bytecode (class file) that can run on any Java Virtual Machine (JVM). Java is
+currently one of the most popular programming languages being used. It has about 10 million users.[7][8]
+
+Java and JavaScript are not the same thing; in fact, they are not even related.
+JavaScript is a scripting language which is used mainly inside of web browsers.

@@ -1,0 +1,86 @@
+Michael O’Brien
+CS 312
+December 7th, 2016
+
+ASN7 Analysis & Design
+
+Problem Statement: The BBCA keeps loosing track of documents! They need a search engine that supports single and
+multiword queries. Note that not all words are interesting and thus they want you to make use of a stoplist too
+
+OOA1
+	This search engine program will need to be able to handle documents and queries while leveraging a stoplist.
+	It will also need to make use of an inverted index to optimize the search process. Operations will include
+	printing document names, printing document content, a document iterator, reading text files, reading user
+	query, checking that all user input is in letters, and a stop list contain check.
+
+OOA2
+o	Documents objects are text files filled with strictly text
+o	StopList is a list of words that we want the program ignore
+o	Inverted Index is a type of mapping that goes from content to location
+o	Queries will be words entered by users in the command line
+o	Operation to print document names is used to output the names of the documents that contain the word the user queried
+o	Operation to print document content serves to output the body of a document
+o	Document Iterator operation is used to traverse the words of a document that will be stored as a string
+o	Operation to read text files is used to attain the content (words) of each document.
+o	Operation to read the user’s query is needed to implement StopList and checkAlpha() upon
+o	Operation to check if user input is all letters is needed
+o	Operation to check if the stoplist contains a word
+
+OOA3
+o	Stoplists words are words such as ‘the’, ‘of’, ‘a’, etc. They are ignored because they would serve as inefficient
+keys in the hash table used to compare documents to queries.
+o	Inverted Index is applicable to this program because it stores a mapping from content, such as words or numbers,
+to its locations in a database file, a document, or set of documents. In this case, our content is a word that points
+to a document, or set of documents, that contain that same word.
+o	Document Iterator operation traverses the words of a document in order to isolate them and store them as keys in
+a hash table
+o	StopList contains operations is used to identify words that should not be included as keys in the hash table
+o	readQuery() operation also deals with @@debug
+o	Letter check operation (checkAlpha) is used to ensure that symbols or numbers in the query do not affect the
+searching of key words
+
+
+OOD1
+
+	In the setup phase, the Document class will read in all the documents used for the assignment using its readFile()
+	method.  Using the Document class’s Iterator() method, the words of each document will be isolated.
+	The InvertedIndex class is the parent of Document class and in turn will have access to the Iterator.
+	InvertedIndex has the hash table keywWord and will set the iterated words from the documents as keys to the table.
+	InvertedIndex is also the parent of StopList class which contains the hash set, stopList, of words that are not
+	allowed to be keys in the keyword hash table.  These two subclasses will work to create the most accurate hash
+	table in the InvertedIndex class. In said hash table, each key, or non-stoplist word from every document, will
+	point to each document that the key word is found in. So when the user enters a query, the words will be compared
+	against the hash table’s keys, and when there is a match, the program will output the list of documents that the
+	word is found in.
+
+Each query will be entered in the CLI class, where it will be read in by the readQuery() method.
+The checkAlpha() method will then be implemented upon the read-in data to remove any non-letter characters.
+A StopList object will be created in the CLI so the query can be scrubbed for stop words by the contains() method.
+The appropriate words in the query will be placed in the ArrayList, queryWords, which will then be compared against
+the keyWord hash table in Inverted Index. The corresponding document names will be printed out by the printDocList()
+method.
+
+Black Box Test Plan:
+Input: “a dog”
+Output: the names of documents that contain the word “dog”
+Rationale: StopList will render “a” a non-factor in the search for documents and only return documents with the word
+“dog”
+
+Input: “a dog and a cat”
+Output: the names of documents that contain the word “dog” or “cat”.
+Rationale: StopList will remove “a” and “and” from the search. Documents that contain either “dog” or “cat” will be
+returned, the document does not to have to have both words in the it for it to be considered a match.
+
+Input: “I tweeted at @Michael”
+Output: the names of documents contain “tweeted” or “Michael”
+Rational: StopList will remove “I” and “a”. The checkAlpha() method will identify the @ symbol and remove it from the
+rest of the string so final search terms are just “tweeted” and “Michael”.
+
+Input: “and”
+Output: Nothing
+Rational: Since “and” is a stopword there will not be an “and” key in the hash table and so no documents will be returned.
+
+Input: “@@debug”
+Output: The current inverted index
+Rationale: When @@debug is entered in the query the readQuery() method will recognize it and will output the current
+inverted index to the console like the assignment instructs.
